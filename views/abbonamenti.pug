@@ -1,0 +1,25 @@
+extends layout 
+block content 
+    h1 Abbonamenti sottoscritti:
+    table 
+       thead
+            tr
+                th Id
+                th Nome
+                th Cognome
+                th Data Nascita
+                th Dettaglio
+        tbody
+            each abbonamento in abbonamenti
+            tr 
+                td #{abbonamento.id}
+                td #{abbonamento.nome}
+                td #{abbonamento.cognome}
+                td #{abbonamento.dataNascita}
+                td a(href="/abbonamento/#{abbonamento.id}") Dettaglio
+// extends layout 
+// block content 
+//     h1 Accesso non consentito
+// extends layout 
+// block content 
+//     h1

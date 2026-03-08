@@ -1,0 +1,25 @@
+extends layout 
+block content
+    h1 Pronto a sottoscrivere il tuo nuovo abbonamento?
+    if error 
+        h1.error Non tutti i campi sono stati compilati correttamente
+        p.error #{error}
+    form(action="/sottoscrivi", method="post") 
+        label(for="nome")
+            input(type="text", name="nome")
+        label(for="cognome")
+            input(type="text", name="cognome")
+        label(for="dataNascita")
+            input(type="date", name="dataNascita")
+        label(for="tipoAbbonamento")
+            select(name="tipoAbbonamento")
+                option(value="mensile") 1 mese
+                option(value="trimestale") 3 mesi
+                option(value="annuale") 1 anno
+        label(for="isExtraurbano") Viaggerai in zone extraurbane?
+            input(type="checkbox", name="isExtraurbano")
+        label(for="isStudente") Sei uno studente? Per te uno sconto speciale è disponibile.
+            input(type="checkbox", name="isStudente")
+        label(for="privacy") Consento al trattamento dei dati personali per finalità di esercizio 
+            input(type="checkbox", name="privacy", required)
+        button(type="submit") Invia

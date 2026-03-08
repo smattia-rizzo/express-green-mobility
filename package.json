@@ -1,0 +1,25 @@
+{
+  "name": "express-green-mobility",
+  "version": "1.0.0",
+  "description": "Esercizio: Portale Abbonamenti \"Green Mobility\" (Versione Server-Side)",
+  "homepage": "https://github.com/smattia-rizzo/express-green-mobility#readme",
+  "bugs": {
+    "url": "https://github.com/smattia-rizzo/express-green-mobility/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smattia-rizzo/express-green-mobility.git"
+  },
+  "license": "ISC",
+  "author": "smattia-rizzo",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "pug": "^3.0.3",
+    "serve-favicon": "^2.5.1"
+  }
+}

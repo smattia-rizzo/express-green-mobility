@@ -1,0 +1,10 @@
+extends layout 
+block content 
+    h1 Abbonamento di #{abbonamento.nome} #{abbonamento.descrizione}
+    p Id: #{abbonamento.id}
+    p Nome: #{abbonamento.nome}
+    p Cognome: #{abbonamento.cognome}
+    p Data Nascita: #{abbonamento.dataNascita.toDateString()}
+    p Tipo Abbonamento: #{abbonamento.tipoAbbonamento}
+    p Extraurbano: #{abbonamento.isExtraurbano}
+    p Studente: #{abbonamento.isStudente}
