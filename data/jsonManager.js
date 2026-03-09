@@ -24,7 +24,7 @@ async function parseAbbonamenti() {
     //Parsing in oggetti
     abbonamenti.forEach(a => {
         lista.push(new abbonamento.Abbonamento(
-            a.nome, a.cognome, new Date(a.dataNascita), a.tipoAbbonamento, a.isExtraurbano, a.isStudente));
+            a.id, a.nome, a.cognome, new Date(a.dataNascita), a.tipoAbbonamento, a.isExtraurbano, a.isStudente));
     });
 
     return lista;
@@ -38,7 +38,8 @@ async function parseAbbonamenti() {
  * @param {abbonamento.Abbonamento[]} lista
  */
 function saveAbbonamenti(lista) {
-    
+    let json = JSON.stringify(lista, null, 2);
+    fs.writeFile(filePath, json);
 }
 
 

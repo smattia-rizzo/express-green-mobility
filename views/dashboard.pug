@@ -1,0 +1,56 @@
+extends layout 
+block content 
+    h2 Dashboard abbonamenti 
+    p Sono stati sottoscritti un totale di #{totali} abbonamenti
+    p Di seguito, un grafico per la distribuzione tra abbonamenti ed extraurbani 
+    canvas(id="impatto" style="width:100%;max-width:600px")
+    p Grafico per la popolarità di abbonamento 
+    canvas(id="tipologia" style="width:100%;max-width:600px")
+
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js") 
+    script.
+        const impatto = !{JSON.stringify(impatto)}
+        const etichette1 = Object.keys(impatto);
+        const valori1 = Object.values(impatto);
+        const colori1 = ["#3e95cd", "#8e54e9"];
+
+        new Chart("impatto", {
+            type: "pie",
+            data: {
+                labels: etichette1,
+                datasets: [{
+                backgroundColor: colori1,
+                data: valori1
+                }]
+            },
+            options: {
+                title: {
+                display: true,
+                text: "Urbano-Extraurbano"
+                }
+            }
+        });
+
+
+
+        const tipologia = !{JSON.stringify(tipologia)}
+        const etichette2 = Object.keys(tipologia);
+        const valori2 = Object.values(tipologia);
+        const colori2 = ["#3e95cd", "#8e54e9", "#cd813e"];
+
+        new Chart("tipologia", {
+            type: "pie",
+            data: {
+                labels: etichette2,
+                datasets: [{
+                backgroundColor: colori2,
+                data: valori2
+                }]
+            },
+            options: {
+                title: {
+                display: true,
+                text: "Tipologia abbonamenti"
+                }
+            }
+        });

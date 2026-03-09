@@ -22,7 +22,17 @@ const isValidDate = (date) => {
 async function start() {
 
 
-    let listaAbbonamenti = jsonManager.parseAbbonamenti();
+    let listaAbbonamenti = await jsonManager.parseAbbonamenti();
+    const getLatestId = () => {
+        let id = 0;
+        for (let i = 0; i < listaAbbonamenti.length; i++) {
+            if (listaAbbonamenti[i].id > id) {
+                id = listaAbbonamenti[i].id
+            }
+        }
+        return id + 1;
+    }
+
 
     const app = express()
     app.use(express.urlencoded({ extended: true }))
@@ -66,7 +76,7 @@ async function start() {
     })
 
 
-    app.post("sottoscrivi", (req, res) => {
+    app.post("/sottoscrivi", (req, res) => {
         //Recupero campi form
         const nome = req.body.nome;
         const cognome = req.body.cognome;
@@ -91,29 +101,41 @@ async function start() {
             res.status(422).render('sottoscrivi', { 
                 title: 'Sottoscrivi',
                 //Messaggio personalizzato in base alla validazione
-                error: `${validateNome ? "" : "Il nome non è stato compilato correttamente.\n"}
-                ${validateCognome ? "" : "Il cognome non è stato compilato correttamente.\n"}
-                ${validateData ? "" : "La data di nascita non è stata compilata correttamente.\n"}
-                ${validateTipoAbbonamento ? "" : "Il tipo di abbonamento non è stato selezionato correttamente.\n"}
-                ${validateExtraurbano ? "" : "Manomissione rilevata sul campo extraurbano.\n"}
-                ${validateStudente ? "" : "Manomissione rilevata sul campo studente.\n"}
+                error: `${validateNome ? "" : "Il nome non è stato compilato correttamente. "}
+                ${validateCognome ? "" : "Il cognome non è stato compilato correttamente. "}
+                ${validateData ? "" : "La data di nascita non è stata compilata correttamente. "}
+                ${validateTipoAbbonamento ? "" : "Il tipo di abbonamento non è stato selezionato correttamente. "}
+                ${validateExtraurbano ? "" : "Manomissione rilevata sul campo extraurbano. "}
+                ${validateStudente ? "" : "Manomissione rilevata sul campo studente. "}
                 ${validatePrivacy ? "" : "È necessario accettare l'informativa sulla privacy."}`
             })
         } else {
             //Creo oggetto abbonamento
-            listaAbbonamenti.push(new abbonamento.Abbonamento(nome, cognome, new Date(dataNascita), tipoAbbonamento, isExtraurbano, isStudente));
+            const a = new abbonamento.Abbonamento(getLatestId(), nome, cognome, new Date(dataNascita), tipoAbbonamento, (isExtraurbano == "on" ? true : false), (isStudente == "on" ? true : false))
+            //Aggiungo l'oggetto alla lista
+            jsonManager.saveAbbonamenti(listaAbbonamenti);
             //Salvo l'oggetto
             jsonManager.saveAbbonamenti(listaAbbonamenti);
+
+            listaAbbonamenti.push(a);
+            //Salvo l'oggetto
+            jsonManager.saveAbbonamenti(listaAbbonamenti);
+
+            //Risposta
+            res.render("success", {
+                title: 'Registrato!',
+                id: a.id
+            })
         }
 
 
 
     })
 
-    app.get("abbonamenti", (req, res) => {
+    app.get("/abbonamenti", (req, res) => {
         res.render('abbonamenti', {
             title: 'Abbonamenti',
-            listaAbbonamenti: listaAbbonamenti
+            abbonamenti: listaAbbonamenti
         })
 
     })
@@ -135,6 +157,44 @@ async function start() {
 
         })
     });
+
+    app.get('/dashboard', (req,res) => {
+        //Calcolo gli abbonamenti totali
+        let abbonamentiTotali = listaAbbonamenti.length;
+
+        //Totale abbonamenti extraurbani
+        let extraurbani = listaAbbonamenti.filter((abbonamento) => abbonamento.isExtraurbano).length;
+
+        const impattoAmbientale = {
+            "Urbani": abbonamentiTotali-extraurbani,
+            "Extra-urbani": extraurbani
+        }
+
+
+        //Calcolo per tipologia
+        let tipologia = {}
+        //Inizializzo l'oggetto
+        Object.keys(abbonamento.prezzi).forEach((t) => {
+            tipologia[t] = 0
+        })
+        listaAbbonamenti.forEach((a) => {
+            tipologia[a.tipoAbbonamento] = tipologia[a.tipoAbbonamento]+1;
+        })
+        
+
+
+
+
+
+        res.render('dashboard', {
+            title: 'Dashboard',
+            totali: abbonamentiTotali,
+            impatto: impattoAmbientale,
+            tipologia: tipologia
+        })
+    })
+
+
 
 
 

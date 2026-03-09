@@ -5,21 +5,22 @@ block content
         h1.error Non tutti i campi sono stati compilati correttamente
         p.error #{error}
     form(action="/sottoscrivi", method="post") 
-        label(for="nome")
+        label(for="nome") Nome: 
             input(type="text", name="nome")
-        label(for="cognome")
+        label(for="cognome") Cognome: 
             input(type="text", name="cognome")
-        label(for="dataNascita")
+        label(for="dataNascita") Data di Nascita: 
             input(type="date", name="dataNascita")
-        label(for="tipoAbbonamento")
+        label(for="tipoAbbonamento") Tipo di abbonamento: 
             select(name="tipoAbbonamento")
+                option(value="" default=true) Scegli un opzione
                 option(value="mensile") 1 mese
-                option(value="trimestale") 3 mesi
+                option(value="trimestrale") 3 mesi
                 option(value="annuale") 1 anno
         label(for="isExtraurbano") Viaggerai in zone extraurbane?
             input(type="checkbox", name="isExtraurbano")
         label(for="isStudente") Sei uno studente? Per te uno sconto speciale è disponibile.
             input(type="checkbox", name="isStudente")
         label(for="privacy") Consento al trattamento dei dati personali per finalità di esercizio 
-            input(type="checkbox", name="privacy", required)
+            input(type="checkbox", name="privacy", required=true)
         button(type="submit") Invia
