@@ -120,7 +120,6 @@ async function start() {
             listaAbbonamenti.push(a);
             //Salvo l'oggetto
             jsonManager.saveAbbonamenti(listaAbbonamenti);
-
             //Risposta
             res.render("success", {
                 title: 'Registrato!',
@@ -147,12 +146,16 @@ async function start() {
         let prezzo = a.getPrezzo();
         console.log(a)
         console.log(prezzo)
-
+        
+        //Controllo compleanno
+        let oggi = new Date();
+        let isCompleanno = oggi.getMonth() == a.dataNascita.getMonth() && oggi.getDate() == a.dataNascita.getDate()
 
         res.render("abbonamento_dettaglio",{
             title: `Dettaglio abbonamento id ${id}`,
             abbonamento: listaAbbonamenti.find((abbonamento) => abbonamento.id == id),
-            prezzo: prezzo
+            prezzo: prezzo,
+            isCompleanno: isCompleanno
 
 
         })
