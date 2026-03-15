@@ -4,6 +4,9 @@ const fs = require("fs").promises
 const abbonamento = require("./model/abbonamento.js");
 const jsonManager = require("./data/jsonManager.js")
 const favicon = require("serve-favicon")
+const morgan = require("morgan")
+const { createWriteStream } = require("fs")
+const helmet = require("helmet")
 
 //Variabili statiche
 const PORT = 3000
@@ -37,6 +40,11 @@ async function start() {
     const app = express()
     app.use(express.urlencoded({ extended: true }))
 
+
+    const accessLogStream = createWriteStream(path.join(__dirname, 'access.log'), {flags: 'a'});
+    app.use(morgan('short', {stream: accessLogStream}));
+
+    app.use(helmet());
 
 
 
@@ -112,13 +120,14 @@ async function start() {
         } else {
             //Creo oggetto abbonamento
             const a = new abbonamento.Abbonamento(getLatestId(), nome, cognome, new Date(dataNascita), tipoAbbonamento, (isExtraurbano == "on" ? true : false), (isStudente == "on" ? true : false))
+            /*
             //Aggiungo l'oggetto alla lista
             jsonManager.saveAbbonamenti(listaAbbonamenti);
             //Salvo l'oggetto
             jsonManager.saveAbbonamenti(listaAbbonamenti);
-
+            */
             listaAbbonamenti.push(a);
-            //Salvo l'oggetto
+            //Salvo la lista contenente il nuovo oggetto
             jsonManager.saveAbbonamenti(listaAbbonamenti);
             //Risposta
             res.render("success", {
